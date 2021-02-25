@@ -1,11 +1,71 @@
 package Boundary;
-use 5.008001;
 use strict;
 use warnings;
 
+use namespace::allclean ();
+use Class::Load qw(try_load_class);
+
 our $VERSION = "0.01";
 
+our %INFO;
 
+sub import {
+    my $class = shift;
+    my $target = scalar caller;
+
+    my $requires = $class->gen_requires($target);
+    {
+        no strict 'refs';
+        *{"${target}::requires"} = $requires;
+    }
+
+    namespace::allclean->import(
+        -cleanee => $target,
+    );
+ 
+    return;
+}
+
+
+our $CROAK_MESSAGE_SUFFIX;
+sub croak {
+  require Carp;
+  no warnings 'redefine';
+  push @_ => $CROAK_MESSAGE_SUFFIX;
+  *croak = \&Carp::croak;
+  goto &Carp::croak;
+}
+
+sub gen_requires {
+    my ($class, $target) = @_;
+    sub {
+        my @methods = @_;
+        push @{$INFO{$target}{requires}||=[]} => @methods;
+        return;
+    }
+}
+
+sub check_requires {
+    my ($class, $impl, $interface) = @_;
+    my @requires = @{$INFO{$interface}{requires}};
+    return if !@requires;
+
+    if (my @requires_fail = grep { !$impl->can($_) } @requires) {
+        croak "Can't apply ${interface} to ${impl} - missing ". join(', ', @requires_fail);
+    }
+}
+
+sub apply_interfaces_to_package {
+    my ($class, $impl, @interfaces) = @_;
+    croak "No interfaces supplied!" unless @interfaces;
+
+    for my $interface (@interfaces) {
+        my ($ok, $e) = try_load_class($interface);
+        croak("cannot load interface package: $e") if !$ok;
+
+        $class->check_requires($impl, $interface);
+    }
+}
 
 1;
 __END__
