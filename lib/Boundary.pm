@@ -86,15 +86,44 @@ __END__
 
 =head1 NAME
 
-Boundary - It's new $module
+Boundary - declare interface package
 
 =head1 SYNOPSIS
 
-    use Boundary;
+Declare interface package C<IFoo>:
+
+    package IFoo {
+        use Boundary;
+
+        requires qw(hello world);
+    }
+
+Implements the interface package C<IFoo>:
+
+    package Foo {
+        use Boundary::Impl qw(IFoo);
+
+        sub hello { ... }
+        sub world { ... }
+    }
+
+Use the type C<ImplOf>:
+
+    use Boundary::Types -types;
+    use Foo;
+
+    my $type = ImplOf['IFoo'];
+    my $foo = Foo->new; # implements of IFoo
+    $type->check($foo); # pass!
 
 =head1 DESCRIPTION
 
-Boundary is ...
+This module provides a interface.
+C<Boundary> declares abstract functions without implementation and defines an interface package.
+C<Bounary::Impl> checks if the abstract functions are implemented at B<compile time>.
+
+The difference with Role is that the implementation cannot be reused.
+L<namespace::allclean> prevents the reuse of the implementation.
 
 =head1 LICENSE
 

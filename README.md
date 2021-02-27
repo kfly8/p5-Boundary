@@ -1,14 +1,43 @@
 # NAME
 
-Boundary - It's new $module
+Boundary - declare interface package
 
 # SYNOPSIS
 
-    use Boundary;
+Declare interface package `IFoo`:
+
+    package IFoo {
+        use Boundary;
+
+        requires qw(hello world);
+    }
+
+Implements the interface package `IFoo`:
+
+    package Foo {
+        use Boundary::Impl qw(IFoo);
+
+        sub hello { ... }
+        sub world { ... }
+    }
+
+Use the type `ImplOf`:
+
+    use Boundary::Types -types;
+    use Foo;
+
+    my $type = ImplOf['IFoo'];
+    my $foo = Foo->new; # implements of IFoo
+    $type->check($foo); # pass!
 
 # DESCRIPTION
 
-Boundary is ...
+This module provides a interface.
+`Boundary` declares abstract functions without implementation and defines an interface package.
+`Bounary::Impl` checks if the abstract functions are implemented at **compile time**.
+
+The difference with Role is that the implementation cannot be reused.
+[namespace::allclean](https://metacpan.org/pod/namespace%3A%3Aallclean) prevents the reuse of the implementation.
 
 # LICENSE
 

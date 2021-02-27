@@ -1,5 +1,5 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "declare interface package",
    "author" : [
       "kfly8 <kfly8@cpan.org>"
    ],
@@ -52,6 +52,17 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/kfly8/p5-Boundary/issues"
+      },
+      "homepage" : "https://github.com/kfly8/p5-Boundary",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/kfly8/p5-Boundary.git",
+         "web" : "https://github.com/kfly8/p5-Boundary"
+      }
+   },
    "version" : "0.01",
    "x_authority" : "cpan:KFLY",
    "x_serialization_backend" : "JSON::PP version 4.04",

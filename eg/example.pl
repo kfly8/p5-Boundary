@@ -1,4 +1,3 @@
-package FooService;
 use strict;
 use warnings;
 
@@ -7,6 +6,4 @@ use Foo;
 
 my $type = ImplOf['IFoo'];
 my $foo = Foo->new;
-warn $type->check($foo);
-
-1;
+$type->check($foo);
