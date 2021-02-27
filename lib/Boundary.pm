@@ -45,7 +45,7 @@ sub gen_requires {
     }
 }
 
-sub check_requires {
+sub assert_requires {
     my ($class, $impl, $interface) = @_;
     my @requires = @{$INFO{$interface}{requires}};
     return if !@requires;
@@ -53,6 +53,7 @@ sub check_requires {
     if (my @requires_fail = grep { !$impl->can($_) } @requires) {
         croak "Can't apply ${interface} to ${impl} - missing ". join(', ', @requires_fail);
     }
+    return !!1;
 }
 
 sub apply_interfaces_to_package {
@@ -63,8 +64,19 @@ sub apply_interfaces_to_package {
         my ($ok, $e) = try_load_class($interface);
         croak("cannot load interface package: $e") if !$ok;
 
-        $class->check_requires($impl, $interface);
+        $class->assert_requires($impl, $interface);
     }
+    $INFO{$impl}{interface_map}{$_} = 1 for @interfaces;
+    return;
+}
+
+sub check_implementations {
+    my ($class, $impl, @interfaces) = @_;
+    my %interface_map = %{$INFO{$impl}{interface_map}||{}};
+    for (@interfaces) {
+        return if !$interface_map{$_}
+    }
+    return !!1;
 }
 
 1;
