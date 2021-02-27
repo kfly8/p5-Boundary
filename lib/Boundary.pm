@@ -45,13 +45,14 @@ sub gen_requires {
 
 sub assert_requires {
     my ($class, $impl, $interface) = @_;
+    croak "Not found interface info. $interface" if !$INFO{$interface};
+
     my @requires = @{$INFO{$interface}{requires}};
     return if !@requires;
 
     if (my @requires_fail = grep { !$impl->can($_) } @requires) {
         croak "Can't apply ${interface} to ${impl} - missing ". join(', ', @requires_fail);
     }
-    return !!1;
 }
 
 sub apply_interfaces_to_package {
