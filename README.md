@@ -1,3 +1,4 @@
+[![Actions Status](https://github.com/kfly8/p5-Boundary/workflows/test/badge.svg)](https://github.com/kfly8/p5-Boundary/actions) [![Coverage Status](https://img.shields.io/coveralls/kfly8/p5-Boundary/master.svg?style=flat)](https://coveralls.io/r/kfly8/p5-Boundary?branch=master) [![MetaCPAN Release](https://badge.fury.io/pl/Boundary.svg)](https://metacpan.org/release/Boundary)
 # NAME
 
 Boundary - declare interface package
@@ -6,29 +7,35 @@ Boundary - declare interface package
 
 Declare interface package `IFoo`:
 
-    package IFoo {
-        use Boundary;
+```perl
+package IFoo {
+    use Boundary;
 
-        requires qw(hello world);
-    }
+    requires qw(hello world);
+}
+```
 
 Implements the interface package `IFoo`:
 
-    package Foo {
-        use Boundary::Impl qw(IFoo);
+```perl
+package Foo {
+    use Boundary::Impl qw(IFoo);
 
-        sub hello { ... }
-        sub world { ... }
-    }
+    sub hello { ... }
+    sub world { ... }
+}
+```
 
 Use the type `ImplOf`:
 
-    use Boundary::Types -types;
-    use Foo;
+```perl
+use Boundary::Types -types;
+use Foo;
 
-    my $type = ImplOf['IFoo'];
-    my $foo = Foo->new; # implements of IFoo
-    $type->check($foo); # pass!
+my $type = ImplOf['IFoo'];
+my $foo = Foo->new; # implements of IFoo
+$type->check($foo); # pass!
+```
 
 # DESCRIPTION
 
