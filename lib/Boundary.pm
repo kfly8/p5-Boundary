@@ -53,6 +53,7 @@ sub assert_requires {
     if (my @requires_fail = grep { !$impl->can($_) } @requires) {
         croak "Can't apply ${interface} to ${impl} - missing ". join(', ', @requires_fail);
     }
+    return;
 }
 
 sub apply_interfaces_to_package {
