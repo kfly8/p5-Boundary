@@ -30,9 +30,7 @@ sub import {
 our $CROAK_MESSAGE_SUFFIX;
 sub croak {
   require Carp;
-  no warnings 'redefine';
-  push @_ => $CROAK_MESSAGE_SUFFIX;
-  *croak = \&Carp::croak;
+  push @_ => $CROAK_MESSAGE_SUFFIX if $CROAK_MESSAGE_SUFFIX;
   goto &Carp::croak;
 }
 
