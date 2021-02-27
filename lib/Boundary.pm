@@ -72,7 +72,8 @@ sub apply_interfaces_to_package {
 
 sub check_implementations {
     my ($class, $impl, @interfaces) = @_;
-    my %interface_map = %{$INFO{$impl}{interface_map}||{}};
+    return if !$INFO{$impl};
+    my %interface_map = %{$INFO{$impl}{interface_map}};
     for (@interfaces) {
         return if !$interface_map{$_}
     }
