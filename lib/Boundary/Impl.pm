@@ -2,17 +2,17 @@ package Boundary::Impl;
 use strict;
 use warnings;
 
-use B::Hooks::EndOfScope;
 use Boundary ();
 
 sub import {
-    my ($class, @interfaces) = @_;
-    my ($target, $filename, $line) = caller;
+    my $class = shift;
+    my $target = scalar caller;
 
-    on_scope_end {
-        local $Boundary::CROAK_MESSAGE_SUFFIX = ". at $filename line $line\n";
-        Boundary->apply_interfaces_to_package($target, @interfaces)
-    };
+    my $impl = Boundary->gen_apply_interfaces_to_package($target);
+    {
+        no strict 'refs';
+        *{"${target}::impl"} = $impl;
+    }
 
     return;
 }
