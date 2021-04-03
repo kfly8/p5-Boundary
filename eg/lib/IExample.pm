@@ -1,4 +1,4 @@
-package IFoo;
+package IExample;
 use strict;
 use warnings;
 
