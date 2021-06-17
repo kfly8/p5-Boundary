@@ -1,8 +1,9 @@
+use lib 'eg/lib';
 use strict;
 use warnings;
 
 use Boundary::Types -types;
-use Foo;
+use Example;
 
 my $type = ImplOf['IFoo'];
 my $foo = Foo->new;
